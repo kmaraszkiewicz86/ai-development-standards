@@ -56,7 +56,6 @@ This repository solves that problem by providing:
 │   ├── architecture.md
 │   ├── coding-style.md
 │   ├── naming.md
-│   ├── security.md
 │   ├── code-review.md
 │   ├── testing.md
 │   ├── dotnet.md
@@ -79,7 +78,6 @@ This repository solves that problem by providing:
     └── explain-code.prompt.md
 README.md
 LICENSE
-CONTRIBUTING.md
 ```
 
 ### Folder Purposes
@@ -173,7 +171,6 @@ for a specific technology domain. Every document follows the same structure:
 - **Bad Practices** — patterns to avoid
 - **Examples** — concrete code examples
 - **Common Mistakes** — frequent pitfalls
-- **Checklist** — verifiable list of requirements
 
 ### Document Reference
 
@@ -203,15 +200,6 @@ properties, fields, files, DTOs, commands, queries, repositories, and
 database objects. Covers C#, Angular, React, and MAUI naming patterns.
 
 Use when: Creating new files or classes, or reviewing existing names for consistency.
-
-#### `security.md`
-
-Defines security standards covering authentication, authorisation, secrets
-management, input validation, SQL injection prevention, XSS, CSRF, transport
-security, and Azure-specific security practices.
-
-Use when: Implementing any feature that handles user data, authentication,
-external integrations, or secrets.
 
 #### `code-review.md`
 
@@ -408,8 +396,6 @@ reliably.
 
 ## Contributing
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed contribution guidelines.
-
 ### Quick Start
 
 To add a new technology or extend existing standards:
@@ -449,8 +435,6 @@ To add a new technology or extend existing standards:
 - Define a standard before it is needed, not after problems arise.
 - Document both what to do and what not to do — anti-patterns are as important
   as best practices.
-- Keep checklists at the bottom of each instruction file — they serve as
-  quick verification tools for both humans and AI assistants.
 
 ---
 

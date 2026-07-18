@@ -37,12 +37,51 @@ Infrastructure Layer  (implements Domain abstractions)
 - Concrete implementations live in the Infrastructure layer.
 - The Composition Root (ConfigurationLayer) wires abstractions to implementations.
 
+### Modern C# Style
+
+Always use the latest stable C# language features.
+
+Prefer:
+
+- Primary constructors
+- Extension blocks
+- Collection expressions
+- Target-typed new
+- File-scoped namespaces
+- Required members where appropriate
+
+Do not generate legacy C# syntax unless explicitly requested.
+
+### Primary Constructors
+
+Always use primary constructors for services, handlers and ViewModels.
+
+```csharp
+public class CreateOrderCommandHandler(
+    IOrderRepository orderRepository,
+    IUnitOfWork unitOfWork)
+    : IAsyncCommandHandler<CreateOrderCommand>
+{
+    public async Task HandleAsync(CreateOrderCommand command, CancellationToken cancellationToken)
+    {
+        var order = Order.Create(command.CustomerId, command.Items);
+        await orderRepository.AddAsync(order, cancellationToken);
+        await unitOfWork.SaveChangesAsync(cancellationToken);
+    }
+}
+```
+
 ### CQRS
 
 - Separate read models (queries) from write models (commands).
 - Use `IAsyncQueryHandler<TQuery, TResult>` for queries.
 - Use `IAsyncCommandHandler<TCommand>` for commands.
 - Always use `Kmaraszkiewicz86.SimpleCqrs` — never MediatR.
+
+Documentation:
+https://github.com/kmaraszkiewicz86/SimpleCqrs
+
+Follow the documentation and examples from the repository.
 
 ### DDD (Domain-Driven Design)
 
@@ -84,6 +123,7 @@ src/
 │   ├── DomainEvents/
 │   ├── DomainServices/
 │   ├── DbRepositories/              ← Repository interfaces
+│   ├── DbQueries/
 │   ├── Specifications/
 │   ├── Enums/
 │   └── Exceptions/
@@ -99,12 +139,7 @@ src/
 │   ├── Storage/
 │   └── Identity/
 ├── MyProject.ConfigurationLayer
-│   ├── ServiceCollectionExtensions.cs
-│   ├── SimpleCqrsConfiguration.cs
-│   ├── RepositoryConfiguration.cs
-│   ├── InfrastructureConfiguration.cs
-│   ├── PersistenceConfiguration.cs
-│   └── ValidationConfiguration.cs
+│   └── ServiceCollectionExtensions.cs
 └── MyProject.Tests
 ```
 
@@ -201,16 +236,3 @@ public class GetOrderByIdQueryHandler(IOrderQueryRepository queryRepository)
 - Creating God classes that handle multiple unrelated concerns.
 - Returning domain entities directly from query handlers instead of DTOs.
 - Leaking EF Core types (like `IQueryable`) across layer boundaries.
-
----
-
-## Checklist
-
-- [ ] Each project layer has a clear, single responsibility
-- [ ] Dependencies flow inward only (no Domain → Infrastructure)
-- [ ] ConfigurationLayer is the only Composition Root
-- [ ] Program.cs is minimal and calls only `AddProjectDependencies()`
-- [ ] Commands and queries are separated
-- [ ] Domain entities are persistence-agnostic
-- [ ] Abstractions are in Domain or Application, implementations in Infrastructure
-- [ ] No circular project references

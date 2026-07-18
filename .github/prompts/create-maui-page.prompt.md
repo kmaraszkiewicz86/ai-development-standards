@@ -127,6 +127,8 @@ public partial class OrderListPageViewModel(
 
 - Add the page route to `AppShell.xaml`
 - Register the View and ViewModel in `ConfigurationLayer`
+- Register Views, ViewModels and services in the .NET MAUI application.
+- Register routes in the MAUI application using Shell routing.
 
 ### Localization
 

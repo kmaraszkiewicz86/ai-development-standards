@@ -35,7 +35,6 @@ Reference the appropriate file when working on each area:
 | [architecture.md](instructions/architecture.md) | Clean Architecture, DDD, CQRS |
 | [coding-style.md](instructions/coding-style.md) | General coding conventions |
 | [naming.md](instructions/naming.md) | Naming conventions for all layers |
-| [security.md](instructions/security.md) | Security standards and practices |
 | [code-review.md](instructions/code-review.md) | Code review criteria |
 | [testing.md](instructions/testing.md) | Unit and integration testing |
 | [dotnet.md](instructions/dotnet.md) | .NET / ASP.NET Core / EF Core |
@@ -84,20 +83,3 @@ Reference the appropriate file when working on each area:
 - Always use xUnit, FluentAssertions, AutoFixture, AutoFixture.AutoNSubstitute, NSubstitute.
 - Follow Arrange / Act / Assert.
 - Every test class must have its own Fixture inheriting from `BaseFixture`.
-
----
-
-## Code Quality Checklist
-
-Before submitting any code:
-
-- [ ] Follows SOLID and Clean Code
-- [ ] No business logic in Controllers, Views, or code-behind
-- [ ] Dependency Injection used throughout
-- [ ] No hardcoded secrets or connection strings
-- [ ] async/await used correctly (no `.Result` or `.Wait()`)
-- [ ] Proper null handling
-- [ ] Unit tests cover happy path, validation, and edge cases
-- [ ] No TODO placeholders
-- [ ] No duplicated code
-- [ ] Security considerations applied

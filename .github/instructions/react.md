@@ -88,39 +88,20 @@ export const OrderCard: React.FC<OrderCardProps> = ({ order, onDelete }) => {
 
 ## React Query
 
-Always use React Query for server state:
+Always use React Query (TanStack Query).
 
-```tsx
-// features/orders/hooks/useOrders.ts
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { orderApi } from '../services/orderApi';
+Use `useQuery()` and `useMutation()` directly inside React components whenever the logic is simple and used only by that component.
 
-export const useOrders = () => {
-  return useQuery({
-    queryKey: ['orders'],
-    queryFn: orderApi.getAll,
-  });
-};
+Extract a custom hook only when:
 
-export const useCreateOrder = () => {
-  const queryClient = useQueryClient();
+- the logic is reused,
+- the query becomes complex,
+- multiple components share the same behavior,
+- it significantly improves readability.
 
-  return useMutation({
-    mutationFn: orderApi.create,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['orders'] });
-    },
-  });
-};
+Do not create custom hooks for every API endpoint by default.
 
-export const useOrder = (id: string) => {
-  return useQuery({
-    queryKey: ['orders', id],
-    queryFn: () => orderApi.getById(id),
-    enabled: !!id,
-  });
-};
-```
+Prefer simplicity over unnecessary abstraction.
 
 ---
 
@@ -230,43 +211,6 @@ export type OrderStatus = 'Pending' | 'Processing' | 'Shipped' | 'Delivered' | '
 
 ---
 
-## Forms with React Hook Form and Zod
-
-```tsx
-// features/orders/components/CreateOrderForm.tsx
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-
-const createOrderSchema = z.object({
-  customerId: z.string().uuid('Invalid customer ID'),
-  items: z.array(z.object({
-    productId: z.string().uuid(),
-    quantity: z.number().min(1).max(100),
-  })).min(1, 'At least one item is required'),
-});
-
-type CreateOrderFormData = z.infer<typeof createOrderSchema>;
-
-export const CreateOrderForm: React.FC = () => {
-  const { register, handleSubmit, formState: { errors } } = useForm<CreateOrderFormData>({
-    resolver: zodResolver(createOrderSchema),
-  });
-
-  const { mutate: createOrder } = useCreateOrder();
-
-  const onSubmit = (data: CreateOrderFormData) => createOrder(data);
-
-  return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      {/* form fields */}
-    </form>
-  );
-};
-```
-
----
-
 ## Best Practices
 
 - Always define TypeScript types for component props, API responses, and state.
@@ -299,20 +243,3 @@ export const CreateOrderForm: React.FC = () => {
 - Using `useEffect` with a missing dependency.
 - Not memoising selector functions when used with context.
 - Forgetting to configure `QueryClientProvider` at the root.
-
----
-
-## Checklist
-
-- [ ] Latest stable React with TypeScript used
-- [ ] Functional Components used throughout
-- [ ] TypeScript strict mode enabled
-- [ ] React Query used for all server state
-- [ ] Axios used for all HTTP calls
-- [ ] API logic in `api/` or `services/` — not in components
-- [ ] No prop drilling beyond two levels
-- [ ] No `any` types
-- [ ] Forms use React Hook Form with Zod validation
-- [ ] Environment variables used — no hardcoded URLs
-- [ ] Named exports preferred
-- [ ] Custom hooks extract reusable logic

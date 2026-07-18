@@ -65,7 +65,7 @@ Apply the following improvements as relevant to the code:
 
 ### React Specific
 
-- Replace `useEffect` data fetching with React Query.
+- Replace `useEffect` data fetching with a dedicated `loadData()` function called inside `useEffect`.
 - Move API calls from components to service files.
 - Add missing TypeScript types — remove `any`.
 - Replace default exports with named exports.

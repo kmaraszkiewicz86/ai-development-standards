@@ -84,13 +84,30 @@ public class GetOrdersByCustomerQueryHandler : IAsyncQueryHandler<GetOrdersByCus
 
 ### DTOs
 
-Suffix with `Dto` for data transfer objects:
+Suffix all data transfer objects with `Dto`.
+
+Prefer immutable classes for DTOs whenever possible.
 
 ```csharp
-public record OrderDto(Guid Id, Guid CustomerId, OrderStatus Status, decimal Total);
-public record OrderSummaryDto(Guid Id, OrderStatus Status, decimal Total);
-public record CreateOrderRequestDto(Guid CustomerId, IReadOnlyList<OrderLineItemDto> Items);
+public class OrderDto
+{
+    public Guid Id { get; init; }
+
+    public Guid CustomerId { get; init; }
+
+    public OrderStatus Status { get; init; }
+
+    public decimal Total { get; init; }
+}
 ```
+
+Use `init` properties to make DTOs immutable where appropriate.
+
+Do not use records for DTOs by default.
+
+Records generate additional functionality such as value equality, which is unnecessary for most DTOs and increases complexity.
+
+Use records only when value-based equality or other record-specific features are explicitly required.
 
 ### Repositories
 
@@ -223,18 +240,3 @@ public class DuplicateOrderException : ApplicationException
 - Using `List` instead of `IReadOnlyList` in public APIs.
 - Naming DTOs without the `Dto` suffix when they are data transfer objects.
 - Inconsistent use of `Id` vs `ID` (always use `Id` in C#).
-
----
-
-## Checklist
-
-- [ ] All C# types use PascalCase
-- [ ] All private fields use `_camelCase`
-- [ ] Async methods end with `Async`
-- [ ] Commands and queries use imperative/noun naming
-- [ ] DTOs are suffixed with `Dto`
-- [ ] Repository interfaces begin with `I`
-- [ ] Exceptions end with `Exception`
-- [ ] No abbreviations except universally recognised ones
-- [ ] Names use domain language (ubiquitous language)
-- [ ] Boolean names are phrased as questions

@@ -189,28 +189,50 @@ public partial class MainPage : ContentPage
 
 ## Navigation
 
-- Use Shell Navigation.
-- Define routes in `AppShell.xaml`.
-- Navigate using `Shell.Current.GoToAsync()`.
-- Pass parameters using query string syntax or `ShellNavigationQueryParameters`.
+Never call `Shell.Current.GoToAsync()` directly from a ViewModel.
+
+Always use a dedicated navigation service registered as a Singleton in Dependency Injection.
+
+Navigation logic must be encapsulated in a single service.
 
 ```csharp
-// Navigate to a page
-await Shell.Current.GoToAsync($"{nameof(OrderDetailPage)}?orderId={orderId}");
-
-// Receive parameter
-[QueryProperty(nameof(OrderId), "orderId")]
-public partial class OrderDetailPageViewModel : ObservableObject
+public interface INavigationService
 {
-    private Guid _orderId;
+    Task GoToOrderDetailPageAsync(int orderId);
 
-    public Guid OrderId
-    {
-        get => _orderId;
-        set => SetProperty(ref _orderId, value);
-    }
+    Task GoBackAsync();
+
+    Task GoToSettingsPageAsync();
 }
 ```
+
+Example implementation:
+
+```csharp
+public class NavigationService : INavigationService
+{
+    public Task GoToOrderDetailPageAsync(int orderId)
+        => Shell.Current.GoToAsync($"{nameof(OrderDetailPage)}?orderId={orderId}");
+
+    public Task GoBackAsync()
+        => Shell.Current.GoToAsync("..");
+}
+```
+
+Always inject `INavigationService` into ViewModels.
+
+Never construct route strings inside ViewModels.
+
+Never reference `Shell.Current` outside the NavigationService.
+
+Each page should have a dedicated navigation method.
+
+Prefer strongly named methods such as:
+
+- `GoToOrderDetailPageAsync()`
+- `GoToSettingsPageAsync()`
+- `GoToLoginPageAsync()`
+- `GoToCustomerPageAsync()`
 
 ---
 
@@ -332,20 +354,3 @@ public partial class MainPage : ContentPage
 - Not using `SetProperty()` when modifying observable properties.
 - Navigating using `new Page()` instead of Shell navigation.
 - Not disposing long-running operations when the page is destroyed.
-
----
-
-## Checklist
-
-- [ ] MVVM applied — no business logic in Views
-- [ ] ViewModels inherit `ObservableObject`
-- [ ] Primary constructors used for DI
-- [ ] `[ObservableProperty]` source generator not used — explicit `SetProperty()` used
-- [ ] `[RelayCommand]` source generator not used — explicit command properties used
-- [ ] `BindingContext` assigned in code-behind — not XAML
-- [ ] `x:DataType` and Compiled Bindings not used
-- [ ] Shell Navigation used
-- [ ] `Kmaraszkiewicz86.Maui.Behaviors` used instead of custom Behaviors
-- [ ] Localization configured for English and Polish
-- [ ] MainPage, MainPage.xaml.cs, and MainPageViewModel created
-- [ ] All services injected — never instantiated directly

@@ -168,20 +168,3 @@ token, not from user-supplied input.
 [BLOCKING] `GetByIdAsync` can return null but the result is used without a null
 check. Either throw a domain exception or handle the null case explicitly.
 ```
-
----
-
-## Review Checklist
-
-Reviewers must verify each item before approving:
-
-- [ ] Architecture — changes are in the correct layer
-- [ ] Naming — follows naming conventions
-- [ ] Async — `CancellationToken` propagated, no `.Result`/`.Wait()`
-- [ ] Null handling — nullable types handled correctly
-- [ ] Security — inputs validated, no hardcoded secrets
-- [ ] Performance — no obvious N+1, large unfiltered queries
-- [ ] Tests — happy path, validation, and exception cases covered
-- [ ] SOLID — no god classes, single responsibility maintained
-- [ ] No business logic in controllers, views, or code-behind
-- [ ] No TODO placeholders

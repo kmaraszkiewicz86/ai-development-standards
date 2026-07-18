@@ -33,32 +33,6 @@ Follow the Conventional Commits specification:
 [optional footer]
 ```
 
-Types:
-
-| Type | Use |
-|------|-----|
-| `feat` | New feature |
-| `fix` | Bug fix |
-| `docs` | Documentation only |
-| `style` | Formatting, no logic change |
-| `refactor` | Code change without feature or fix |
-| `test` | Adding or updating tests |
-| `chore` | Build process, dependencies, tools |
-| `perf` | Performance improvement |
-| `ci` | CI/CD changes |
-| `revert` | Reverts a previous commit |
-
-Examples:
-
-```
-feat(orders): add create order endpoint
-fix(auth): resolve token expiry not refreshing
-docs(readme): update setup instructions
-refactor(orders): extract validation to FluentValidation
-test(orders): add unit tests for CreateOrderCommandHandler
-chore(deps): update SimpleCqrs to 0.1.4
-```
-
 ### Rules
 
 - Commit messages must be in English.
@@ -237,18 +211,3 @@ Recommended repository settings:
 - Using `actions/checkout` without specifying a version tag.
 - Not caching dependencies in CI workflows.
 - Not adding required status checks for PRs.
-
----
-
-## Checklist
-
-- [ ] Branch name follows the naming convention
-- [ ] Commit messages follow Conventional Commits
-- [ ] PR has a summary, changes list, and testing notes
-- [ ] PR references related issues
-- [ ] CI workflow builds and tests the code
-- [ ] All secrets stored in GitHub Secrets
-- [ ] Action versions are pinned
-- [ ] Branch protection rules applied to `main`
-- [ ] Dependabot enabled
-- [ ] CodeQL scanning enabled

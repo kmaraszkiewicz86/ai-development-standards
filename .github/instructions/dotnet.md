@@ -35,6 +35,8 @@ dotnet add package Kmaraszkiewicz86.SimpleCqrs --version 0.1.4
 
 Reference: https://github.com/kmaraszkiewicz86/SimpleCqrs
 
+This link contains the official documentation. Follow the documentation and examples provided in the repository.
+
 Always use:
 
 - `IAsyncQueryHandler<TQuery, TResult>` for queries
@@ -351,18 +353,3 @@ public class CreateOrderCommandHandler(
 - Placing entity relationships in domain entities instead of `EntityConfiguration`.
 - Not propagating `CancellationToken` from endpoints to repositories.
 - Using `async Task` in endpoints instead of the minimal API delegate pattern.
-
----
-
-## Checklist
-
-- [ ] `Kmaraszkiewicz86.SimpleCqrs` installed and configured
-- [ ] `Program.cs` is minimal — only calls `AddProjectDependencies`
-- [ ] ConfigurationLayer is the Composition Root
-- [ ] Every entity has an `IEntityTypeConfiguration<TEntity>`
-- [ ] `ApplyConfigurationsFromAssembly` used in `DbContext`
-- [ ] Nullable Reference Types enabled
-- [ ] `CancellationToken` propagated through all async calls
-- [ ] FluentValidation used for all validation
-- [ ] Domain entities are persistence-agnostic
-- [ ] Application layer returns DTOs — not domain entities
